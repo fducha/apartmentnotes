@@ -29,13 +29,13 @@ public class DB {
     public static final String DB_FIELD_APARTMENTS_HAS_BALCONY = "hasBalcony";
     public static final String DB_FIELD_APARTMENTS_BUILD_TYPE_ID = "buildTypeId";
     public static final String DB_FIELD_APARTMENTS_YEAR_BUILD = "yearBuild";
-    public static final String DB_FIELD_APARTMENTS_PREVIEW_ID = "previewId";
     public static final String DB_FIELD_APARTMENTS_AGENCY_ID = "agencyId";
 
     public static final String DB_FIELD_BUILD_TYPES_ID = "id";
     public static final String DB_FIELD_BUILD_TYPES_TYPE = "type";
 
     public static final String DB_FIELD_PREVIEWS_ID = "id";
+    public static final String DB_FIELD_PREVIEWS_APARTMENT_ID = "apartmentId";
     public static final String DB_FIELD_PREVIEWS_DATE = "date";
     public static final String DB_FIELD_PREVIEWS_TIME = "time";
     public static final String DB_FIELD_PREVIEWS_IS_DONE = "isDone";
@@ -62,7 +62,6 @@ public class DB {
                     DB_FIELD_APARTMENTS_HAS_BALCONY + " boolean, " +
                     DB_FIELD_APARTMENTS_BUILD_TYPE_ID + " integer, " +
                     DB_FIELD_APARTMENTS_YEAR_BUILD + " integer, " +
-                    DB_FIELD_APARTMENTS_PREVIEW_ID + " integer, " +
                     DB_FIELD_APARTMENTS_AGENCY_ID + " integer" +
             ");";
 
@@ -75,6 +74,7 @@ public class DB {
     private static final String DB_CREATE_PREVIEWS_TABLE =
             "create table " + DB_TABLE_PREVIEWS + "(" +
                     DB_FIELD_PREVIEWS_ID + " integer primary key autoincrement, " +
+                    DB_FIELD_PREVIEWS_APARTMENT_ID + " integer, " +
                     DB_FIELD_PREVIEWS_DATE + " integer, " +
                     DB_FIELD_PREVIEWS_TIME + " integer, " +
                     DB_FIELD_PREVIEWS_IS_DONE + " boolean" +
