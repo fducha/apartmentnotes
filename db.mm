@@ -1,7 +1,7 @@
 <map version="freeplane 1.2.0">
 <!--To view this file, download free mind mapping software Freeplane from http://freeplane.sourceforge.net -->
 <node TEXT="Data Base" ID="ID_1723255651" CREATED="1283093380553" MODIFIED="1426524504341"><hook NAME="MapStyle">
-    <properties show_note_icons="true" show_icon_for_attributes="true"/>
+    <properties show_icon_for_attributes="true" show_note_icons="true"/>
 
 <map_styles>
 <stylenode LOCALIZED_TEXT="styles.root_node">
@@ -64,6 +64,7 @@
 </node>
 <node TEXT="street" ID="ID_859463599" CREATED="1426524742077" MODIFIED="1426524748524"/>
 <node TEXT="buildNo" ID="ID_833036506" CREATED="1426524817613" MODIFIED="1426524832724"/>
+<node TEXT="housing" ID="ID_1611355488" CREATED="1426685385144" MODIFIED="1426685426759"/>
 <node TEXT="price" ID="ID_1098609328" CREATED="1426524873364" MODIFIED="1426524876402"/>
 <node TEXT="floor" ID="ID_1048413062" CREATED="1426524877084" MODIFIED="1426524891626"/>
 <node TEXT="totalFloors" ID="ID_688975796" CREATED="1426524943732" MODIFIED="1426524953257"/>
