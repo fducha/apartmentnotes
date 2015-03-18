@@ -1,17 +1,25 @@
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener {
+
+    Button btnAddApartment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        btnAddApartment = (Button) findViewById(R.id.btnAddApartment);
+        btnAddApartment.setOnClickListener(this);
     }
 
 
@@ -35,5 +43,13 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btnAddApartment) {
+            Intent intent = new Intent(this, ApartmentActivity.class);
+            startActivity(intent);
+        }
     }
 }
