@@ -21,6 +21,7 @@ public class Apartment {
     Apartment(String street, int buildNo, String housing, int price,
               int floor, int totalFloors, int countRooms, boolean hasBalcony,
               int buildTypeId, int yearBuild, int agencyId) {
+        setId(-1);
         setStreet(street);
         setBuildNo(buildNo);
         setHousing(housing);
@@ -34,8 +35,8 @@ public class Apartment {
         setAgencyId(agencyId);
     }
 
-    public void setId(int id) {
-        m_id = id;
+    public void setId(int _id) {
+        m_id = _id;
     }
 
     public int getId() {

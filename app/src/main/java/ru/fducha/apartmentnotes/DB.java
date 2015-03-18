@@ -1,5 +1,6 @@
 package ru.fducha.apartmentnotes;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -112,6 +113,23 @@ public class DB {
     public void close() {
         if (mDBHelper != null)
             mDBHelper.close();
+    }
+
+    public void addApartment(Apartment apartment) {
+        ContentValues cv = new ContentValues();
+        cv.put(DB_FIELD_APARTMENTS_STREET, apartment.getStreet());
+        cv.put(DB_FIELD_APARTMENTS_BUILD_NO, apartment.getBuildNo());
+        cv.put(DB_FIELD_APARTMENTS_HOUSING, apartment.getHousing());
+        cv.put(DB_FIELD_APARTMENTS_PRICE, apartment.getPrice());
+        cv.put(DB_FIELD_APARTMENTS_FLOOR, apartment.getFloor());
+        cv.put(DB_FIELD_APARTMENTS_TOTAL_FLOORS, apartment.getTotalFloors());
+        cv.put(DB_FIELD_APARTMENTS_STREET, apartment.getStreet());
+        cv.put(DB_FIELD_APARTMENTS_COUNT_ROOMS, apartment.getCountRooms());
+        cv.put(DB_FIELD_APARTMENTS_HAS_BALCONY, apartment.hasBalcony());
+        cv.put(DB_FIELD_APARTMENTS_BUILD_TYPE_ID, apartment.getBuildTypeId());
+        cv.put(DB_FIELD_APARTMENTS_YEAR_BUILD, apartment.getYearBuild());
+        cv.put(DB_FIELD_APARTMENTS_AGENCY_ID, apartment.getAgencyId());
+        mDB.insert(DB_TABLE_APARTMENTS, null, cv);
     }
 
     private class DBHelper extends SQLiteOpenHelper {
