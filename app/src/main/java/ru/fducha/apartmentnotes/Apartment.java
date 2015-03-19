@@ -16,11 +16,14 @@ public class Apartment {
     private boolean m_hasBalcony;
     private int m_buildTypeId;
     private int m_yearBuild;
-    private int m_agencyId;
+    private String m_agencyName;
+    private String m_agentName;
+    private String m_agentPhone;
 
-    Apartment(String street, int buildNo, String housing, int price,
-              int floor, int totalFloors, int countRooms, boolean hasBalcony,
-              int buildTypeId, int yearBuild, int agencyId) {
+    Apartment(String street, int buildNo, String housing,
+              int price, int floor, int totalFloors,
+              int countRooms, boolean hasBalcony, int buildTypeId,
+              int yearBuild, String agencyName, String agentName, String agentPhone) {
         setId(-1);
         setStreet(street);
         setBuildNo(buildNo);
@@ -32,7 +35,30 @@ public class Apartment {
         setBalcony(hasBalcony);
         setBuildTypeId(buildTypeId);
         setYearBuild(yearBuild);
-        setAgencyId(agencyId);
+        setAgencyName(agencyName);
+        setAgentName(agentName);
+        setAgentPhone(agentPhone);
+    }
+
+    Apartment() {
+        setId(-1);
+        setStreet("");
+        setBuildNo(0);
+        setHousing("");
+        setPrice(0);
+        setFloor(0);
+        setTotalFloors(0);
+        setCountRooms(0);
+        setBalcony(false);
+        setBuildTypeId(-1);
+        setYearBuild(0);
+        setAgencyName("");
+        setAgentName("");
+        setAgentPhone("");
+    }
+
+    public boolean isEmpty() {
+        return getStreet().isEmpty();
     }
 
     public void setId(int _id) {
@@ -123,11 +149,27 @@ public class Apartment {
         return m_yearBuild;
     }
 
-    public void setAgencyId(int _agId) {
-        m_agencyId = _agId;
+    public void setAgencyName(String _agName) {
+        m_agencyName = _agName;
     }
 
-    public int getAgencyId() {
-        return m_agencyId;
+    public String getAgencyName() {
+        return m_agencyName;
+    }
+
+    public void setAgentName(String _aName) {
+        m_agentName = _aName;
+    }
+
+    public String getAgentName() {
+        return m_agentName;
+    }
+
+    public void setAgentPhone(String _phone) {
+        m_agentPhone = _phone;
+    }
+
+    public String getAgentPhone() {
+        return m_agentPhone;
     }
 }

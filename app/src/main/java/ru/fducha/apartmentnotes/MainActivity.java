@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.btnAddApartment) {
             Intent intent = new Intent(this, ApartmentActivity.class);
+            intent.putExtra("apartmentId", -1);
             startActivity(intent);
         }
     }
