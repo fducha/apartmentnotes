@@ -121,7 +121,8 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
         String agentPhone = etAgentPhone.getText().toString();
         m_apartment = new Apartment(street, buildNo, housing, price, floor, totalFloors,
                 countRooms, isBalcony, -1, year, agency, agentName, agentPhone);
-        db.addApartment(m_apartment);
+        if (!m_apartment.isEmpty())
+            db.addApartment(m_apartment);
     }
 
     private void setApartmentDataToWidgets() {

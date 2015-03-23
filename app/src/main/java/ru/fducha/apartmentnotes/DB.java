@@ -20,7 +20,7 @@ public class DB {
     private static final String DB_TABLE_AGENCY = "agency";
     public static final String DB_TABLE_APARTMENT_NOTES = "apartmentNotes";
 
-    public static final String DB_FIELD_APARTMENTS_ID = "id";
+    public static final String DB_FIELD_APARTMENTS_ID = "_id";
     public static final String DB_FIELD_APARTMENTS_STREET = "street";
     public static final String DB_FIELD_APARTMENTS_BUILD_NO = "buildNo";
     public static final String DB_FIELD_APARTMENTS_HOUSING = "housing";
@@ -127,7 +127,7 @@ public class DB {
 
     public Apartment getApartmentById(int _id) {
         String[] args = new String[] {"" + _id};
-        Cursor cursor = mDB.query(DB_TABLE_APARTMENTS, null, "id = ?", args, null, null, null);
+        Cursor cursor = mDB.query(DB_TABLE_APARTMENTS, null, "_id = ?", args, null, null, null);
         if (cursor.getCount() == 1) {
             if (cursor.moveToFirst()) {
                 Apartment ap = new Apartment();
@@ -153,6 +153,10 @@ public class DB {
         return new Apartment();
     }
 
+    public Cursor getAllApartments() {
+        return mDB.query(DB_TABLE_APARTMENTS, null, null, null, null, null, null);
+    }
+
     public Cursor getBuildTypes() {
         return mDB.query(DB_TABLE_BUILD_TYPES, null, null, null, null, null, null);
     }
@@ -170,17 +174,17 @@ public class DB {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(DB_CREATE_APARTMENTS_TABLE);
-            db.execSQL(DB_CREATE_BUILD_TYPES_TABLE);
-
-            ContentValues cv = new ContentValues();
-            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Хрущевка");
-            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
-            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Брежневка");
-            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
-            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "93 серия");
-            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
-            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Улучшенной планировки");
-            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
+//            db.execSQL(DB_CREATE_BUILD_TYPES_TABLE);
+//
+//            ContentValues cv = new ContentValues();
+//            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Хрущевка");
+//            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
+//            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Брежневка");
+//            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
+//            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "93 серия");
+//            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
+//            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Улучшенной планировки");
+//            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
         }
 
         @Override
