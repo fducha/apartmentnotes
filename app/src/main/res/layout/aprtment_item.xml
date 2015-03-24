@@ -25,8 +25,9 @@
                 android:layout_height="wrap_content"
                 android:text="The Street,"
                 android:id="@+id/tvStreet"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:textColor="#ffff1d6d" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -34,18 +35,20 @@
                 android:text="build"
                 android:id="@+id/tvBuild"
                 android:textStyle="bold"
-                android:textSize="18dp"
-                android:layout_marginLeft="10dp" />
+                android:textSize="22dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#ffff1d6d" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"
-                android:id="@+id/textView13"
+                android:id="@+id/tvTire"
                 android:textStyle="bold"
-                android:textSize="18dp"
+                android:textSize="22dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:textColor="#ffff1d6d" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,7 +56,8 @@
                 android:text="H"
                 android:id="@+id/tvHousing"
                 android:textStyle="bold"
-                android:textSize="18dp" />
+                android:textSize="22dp"
+                android:textColor="#ffff1d6d" />
         </LinearLayout>
 
         <LinearLayout

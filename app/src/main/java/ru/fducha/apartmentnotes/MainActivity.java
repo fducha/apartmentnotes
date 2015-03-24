@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
     Button btnAddApartment;
     ListView lvApartments;
     DB db;
-    SimpleCursorAdapter scAdapter;
+    MySimpleCursorAdapter scAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
                 R.id.tvFloor,
                 R.id.tvTotalFloor,
                 R.id.tvCountRooms,
-                R.id.cbBalcony,
+                R.id.tvHasBalcony,
 //                R.id.spBuildTypes,
                 R.id.tvYearBuild,
                 R.id.tvAgency,
@@ -65,7 +66,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
                 R.id.tvPhone
         };
 
-        scAdapter = new SimpleCursorAdapter(this, R.layout.aprtment_item, null, from, to, 0);
+        scAdapter = new MySimpleCursorAdapter(this, R.layout.aprtment_item, null, from, to, 0);
         lvApartments = (ListView) findViewById(R.id.lvApartments);
         lvApartments.setAdapter(scAdapter);
 
@@ -149,4 +150,23 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
         }
     }
 
+    class MySimpleCursorAdapter extends SimpleCursorAdapter {
+        public MySimpleCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+            super(context, layout, c, from, to, flags);
+        }
+
+        @Override
+        public void setViewText(TextView v, String text) {
+            // super.setViewText(v, text);
+            if (v.getId() == R.id.tvHasBalcony) {
+                int has = Integer.parseInt(text);
+                if (has == 1) {
+                    text = "балкон";
+                } else {
+                    text = "без балкона";
+                }
+            }
+            super.setViewText(v, text);
+        }
+    }
 }
