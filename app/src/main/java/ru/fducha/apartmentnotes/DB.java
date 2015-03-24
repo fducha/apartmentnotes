@@ -161,6 +161,20 @@ public class DB {
         return mDB.query(DB_TABLE_BUILD_TYPES, null, null, null, null, null, null);
     }
 
+    private boolean hasBuildType(String type) {
+        String[] args = new String[] {"" + type};
+        Cursor cursor = mDB.query(DB_TABLE_BUILD_TYPES, null, DB_FIELD_BUILD_TYPES_TYPE + " = ?", args, null, null, null);
+        if (cursor.getCount() > 0)
+            return true;
+        else return false;
+    }
+
+    public void addBuildType(String type){
+        if (!type.isEmpty() && !hasBuildType(type)) {
+            //
+        }
+    }
+
     public int getCountRecordsInTable(String _table) {
         return mDB.query(_table, null, null, null, null, null, null).getCount();
     }

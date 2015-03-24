@@ -85,7 +85,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/etHausing"
                         android:layout_column="3"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:inputType="textCapCharacters" />
                 </TableRow>
 
                 <TableRow
@@ -200,7 +201,7 @@
                     android:layout_gravity="center_vertical" />
 
                 <Spinner
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spBuildTypes" />
 

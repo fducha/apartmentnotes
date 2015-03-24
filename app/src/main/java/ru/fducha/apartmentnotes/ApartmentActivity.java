@@ -1,14 +1,19 @@
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,6 +22,7 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
 
     Spinner spBuildTypes;
     Button btnCancelApartment, btnSaveApartment;
+    ImageButton btnAddBuildType;
     EditText etStreet, etBuildNo, etHousing, etFloor, etTFloors,
              etCountRooms, etYearBuild, etPrice, etAgency,
              etAgentName, etAgentPhone;
@@ -32,6 +38,7 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
 
         btnCancelApartment = (Button) findViewById(R.id.btnCancelApartment);
         btnSaveApartment = (Button) findViewById(R.id.btnSaveApartment);
+        btnAddBuildType = (ImageButton) findViewById(R.id.btnAddBuildType);
 
         etStreet = (EditText) findViewById(R.id.etStreet);
         etBuildNo = (EditText) findViewById(R.id.etBuildNo);
@@ -48,6 +55,7 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
 
         btnSaveApartment.setOnClickListener(this);
         btnCancelApartment.setOnClickListener(this);
+        btnAddBuildType.setOnClickListener(this);
 
         db = new DB(this);
         db.open();
@@ -99,9 +107,13 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
 //                Toast.makeText(this, db.DB_TABLE_APARTMENTS + " has recs: " +
 //                        db.getCountRecordsInTable(db.DB_TABLE_APARTMENTS), Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "Apartment on " + m_apartment.getStreet() + " " +
-                        m_apartment.getBuildNo() + m_apartment.getHousing() + " was added.",
+                                m_apartment.getBuildNo() + m_apartment.getHousing() + " was added.",
                         Toast.LENGTH_SHORT).show();
                 finish();
+                break;
+            case R.id.btnAddBuildType:
+                Toast.makeText(this, "add type build", Toast.LENGTH_SHORT).show();
+                showDialogAddingBuildType();
                 break;
         }
     }
@@ -123,6 +135,30 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
                 countRooms, isBalcony, -1, year, agency, agentName, agentPhone);
         if (!m_apartment.isEmpty())
             db.addApartment(m_apartment);
+    }
+
+    private void showDialogAddingBuildType() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Тип дома");
+        alert.setMessage("Введите новый тип дома");
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        alert.setView(input);
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String value = input.getText().toString();
+                //Toast.makeText(this, "new type " + value, Toast.LENGTH_SHORT).show();
+                Log.d("log", value);
+            }
+        });
+        alert.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+            }
+        });
+        alert.show();
     }
 
     private void setApartmentDataToWidgets() {
