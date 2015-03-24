@@ -1,15 +1,13 @@
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -17,12 +15,14 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.List;
 
-public class ApartmentActivity extends Activity implements View.OnClickListener {
+
+public class ApartmentActivity extends Activity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Spinner spBuildTypes;
     Button btnCancelApartment, btnSaveApartment;
-    ImageButton btnAddBuildType;
+    ImageButton btnEditBuildTypes;
     EditText etStreet, etBuildNo, etHousing, etFloor, etTFloors,
              etCountRooms, etYearBuild, etPrice, etAgency,
              etAgentName, etAgentPhone;
@@ -38,7 +38,7 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
 
         btnCancelApartment = (Button) findViewById(R.id.btnCancelApartment);
         btnSaveApartment = (Button) findViewById(R.id.btnSaveApartment);
-        btnAddBuildType = (ImageButton) findViewById(R.id.btnAddBuildType);
+        btnEditBuildTypes = (ImageButton) findViewById(R.id.btnEditBuildTypes);
 
         etStreet = (EditText) findViewById(R.id.etStreet);
         etBuildNo = (EditText) findViewById(R.id.etBuildNo);
@@ -55,15 +55,19 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
 
         btnSaveApartment.setOnClickListener(this);
         btnCancelApartment.setOnClickListener(this);
-        btnAddBuildType.setOnClickListener(this);
+        btnEditBuildTypes.setOnClickListener(this);
 
         db = new DB(this);
         db.open();
+
+        spBuildTypes = (Spinner) findViewById(R.id.spBuildTypes);
+        spBuildTypes.setOnItemSelectedListener(this);
 
         Intent intent = getIntent();
         int apId = intent.getIntExtra("apartmentId", -1);
 
         m_apartment = db.getApartmentById(apId);
+//        Log.d("log", "create build = " + m_apartment.getBuildTypeId());
 
         setApartmentDataToWidgets();
     }
@@ -104,16 +108,14 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
                 break;
             case R.id.btnSaveApartment:
                 addApartment();
-//                Toast.makeText(this, db.DB_TABLE_APARTMENTS + " has recs: " +
-//                        db.getCountRecordsInTable(db.DB_TABLE_APARTMENTS), Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "Apartment on " + m_apartment.getStreet() + " " +
                                 m_apartment.getBuildNo() + m_apartment.getHousing() + " was added.",
                         Toast.LENGTH_SHORT).show();
                 finish();
                 break;
-            case R.id.btnAddBuildType:
-                Toast.makeText(this, "add type build", Toast.LENGTH_SHORT).show();
-                showDialogAddingBuildType();
+            case R.id.btnEditBuildTypes:
+                //Toast.makeText(this, "add type build", Toast.LENGTH_SHORT).show();
+                //showDialogAddingBuildType();
                 break;
         }
     }
@@ -126,40 +128,55 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
         int totalFloors = Integer.parseInt(etTFloors.getText().toString());
         int countRooms = Integer.parseInt(etCountRooms.getText().toString());
         boolean isBalcony = cbBalcony.isChecked();
+        int type = m_apartment.getBuildTypeId();
         int year = Integer.parseInt(etYearBuild.getText().toString());
         int price = Integer.parseInt(etPrice.getText().toString());
         String agency = etAgency.getText().toString();
         String agentName = etAgentName.getText().toString();
         String agentPhone = etAgentPhone.getText().toString();
         m_apartment = new Apartment(street, buildNo, housing, price, floor, totalFloors,
-                countRooms, isBalcony, -1, year, agency, agentName, agentPhone);
+                countRooms, isBalcony, type, year, agency, agentName, agentPhone);
         if (!m_apartment.isEmpty())
             db.addApartment(m_apartment);
     }
 
-    private void showDialogAddingBuildType() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Тип дома");
-        alert.setMessage("Введите новый тип дома");
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        alert.setView(input);
-        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String value = input.getText().toString();
-                //Toast.makeText(this, "new type " + value, Toast.LENGTH_SHORT).show();
-                Log.d("log", value);
-            }
-        });
-        alert.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //
-            }
-        });
-        alert.show();
+    private void loadSpinnerData() {
+        List<String> bTypes = db.getAllBuildTypes();
+//        Toast.makeText(this, "count = " + bTypes.size(), Toast.LENGTH_SHORT).show();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, bTypes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spBuildTypes.setAdapter(adapter);
+//        Log.d("log", "spiner build = " + m_apartment.getBuildTypeId());
+        if (m_apartment.getBuildTypeId() != -1) {
+            String currentType = db.getBuildTypeById(m_apartment.getBuildTypeId());
+            spBuildTypes.setSelection(bTypes.indexOf(currentType));
+        }
     }
+
+//    private void showDialogAddingBuildType() {
+//        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//        alert.setTitle("Тип дома");
+//        alert.setMessage("Введите новый тип дома");
+//        final EditText input = new EditText(this);
+//        input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+//        alert.setView(input);
+//        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                String value = input.getText().toString();
+//                //Toast.makeText(this, "new type " + value, Toast.LENGTH_SHORT).show();
+//                Log.d("log", value);
+//            }
+//        });
+//        alert.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                //
+//            }
+//        });
+//        alert.show();
+//    }
 
     private void setApartmentDataToWidgets() {
         etStreet.setText(m_apartment.getStreet());
@@ -181,6 +198,9 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
         else
             etCountRooms.setText("" + m_apartment.getCountRooms());
         cbBalcony.setChecked(m_apartment.hasBalcony());
+
+        loadSpinnerData();
+
         if (m_apartment.getYearBuild() == 0)
             etYearBuild.setText("");
         else
@@ -192,5 +212,20 @@ public class ApartmentActivity extends Activity implements View.OnClickListener 
         etAgency.setText("" + m_apartment.getAgencyName());
         etAgentName.setText("" + m_apartment.getAgentName());
         etAgentPhone.setText("" + m_apartment.getAgentPhone());
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String type = parent.getItemAtPosition(position).toString();
+//        Log.d("log", "select build = " + type);
+        int i = db.getBuildTypeIdByName(type);
+//        Log.d("log", "select build id = " + i);
+        m_apartment.setBuildTypeId(i);
+//        Log.d("log", "apartment build id = " + m_apartment.getBuildTypeId());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //
     }
 }

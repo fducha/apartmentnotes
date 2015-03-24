@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
                 DB.DB_FIELD_APARTMENTS_TOTAL_FLOORS,
                 DB.DB_FIELD_APARTMENTS_COUNT_ROOMS,
                 DB.DB_FIELD_APARTMENTS_HAS_BALCONY,
-//                DB.DB_FIELD_APARTMENTS_BUILD_TYPE_ID,
+                DB.DB_FIELD_APARTMENTS_BUILD_TYPE_ID,
                 DB.DB_FIELD_APARTMENTS_YEAR_BUILD,
                 DB.DB_FIELD_APARTMENTS_AGENCY_NAME,
                 DB.DB_FIELD_APARTMENTS_AGENT_NAME,
@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
                 R.id.tvTotalFloor,
                 R.id.tvCountRooms,
                 R.id.tvHasBalcony,
-//                R.id.spBuildTypes,
+                R.id.tvBuildType,
                 R.id.tvYearBuild,
                 R.id.tvAgency,
                 R.id.tvAgentName,
@@ -74,8 +74,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
         btnAddApartment.setOnClickListener(this);
 
         getLoaderManager().initLoader(0, null, this);
-
-//        getLoaderManager().getLoader(0).forceLoad();
     }
 
 
@@ -165,6 +163,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
                 } else {
                     text = "без балкона";
                 }
+            }
+            if (v.getId() == R.id.tvBuildType) {
+                int type = Integer.parseInt(text);
+//                Log.d("log", "id type = " + type);
+                text = db.getBuildTypeById(type);
+//                Log.d("log", "type = " + text);
             }
             super.setViewText(v, text);
         }

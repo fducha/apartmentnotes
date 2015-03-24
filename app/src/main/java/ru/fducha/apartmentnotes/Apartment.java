@@ -134,7 +134,7 @@ public class Apartment {
     }
 
     public void setBuildTypeId(int _btId) {
-        m_buildTypeId = -_btId;
+        m_buildTypeId = _btId;
     }
 
     public int getBuildTypeId() {

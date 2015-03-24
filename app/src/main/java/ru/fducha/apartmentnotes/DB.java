@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by fducha on 18.03.15.
  */
@@ -35,7 +38,7 @@ public class DB {
     public static final String DB_FIELD_APARTMENTS_AGENT_NAME = "agentName";
     public static final String DB_FIELD_APARTMENTS_AGENT_PHONE = "phone";
 
-    public static final String DB_FIELD_BUILD_TYPES_ID = "id";
+    public static final String DB_FIELD_BUILD_TYPES_ID = "_id";
     public static final String DB_FIELD_BUILD_TYPES_TYPE = "type";
 
     public static final String DB_FIELD_PREVIEWS_ID = "id";
@@ -49,7 +52,7 @@ public class DB {
     public static final String DB_FIELD_APARTMENT_NOTES_NOTE = "note";
 
     private static final String DB_CREATE_APARTMENTS_TABLE =
-            "create table " + DB_TABLE_APARTMENTS + "(" +
+            "create table " + DB_TABLE_APARTMENTS + " ( " +
                     DB_FIELD_APARTMENTS_ID + " integer primary key autoincrement, " +
                     DB_FIELD_APARTMENTS_STREET + " text, " +
                     DB_FIELD_APARTMENTS_BUILD_NO + " integer, " +
@@ -67,13 +70,13 @@ public class DB {
             ");";
 
     private static final String DB_CREATE_BUILD_TYPES_TABLE =
-            "create table " + DB_TABLE_BUILD_TYPES + "(" +
+            "create table " + DB_TABLE_BUILD_TYPES + " ( " +
                     DB_FIELD_BUILD_TYPES_ID + " integer primary key autoincrement, " +
                     DB_FIELD_BUILD_TYPES_TYPE+ " text" +
             ");";
 
     private static final String DB_CREATE_PREVIEWS_TABLE =
-            "create table " + DB_TABLE_PREVIEWS + "(" +
+            "create table " + DB_TABLE_PREVIEWS + " ( " +
                     DB_FIELD_PREVIEWS_ID + " integer primary key autoincrement, " +
                     DB_FIELD_PREVIEWS_APARTMENT_ID + " integer, " +
                     DB_FIELD_PREVIEWS_DATE + " integer, " +
@@ -82,7 +85,7 @@ public class DB {
             ");";
 
     private static final String DB_CREATE_APARTMENT_NOTES_TABLE =
-            "create table " + DB_TABLE_APARTMENT_NOTES + "(" +
+            "create table " + DB_TABLE_APARTMENT_NOTES + " ( " +
                     DB_FIELD_APARTMENT_NOTES_ID + " integer primary key autoincrement, " +
                     DB_FIELD_APARTMENT_NOTES_APARTMENT_ID + " text, " +
                     DB_FIELD_APARTMENT_NOTES_NOTE + " text" +
@@ -157,8 +160,50 @@ public class DB {
         return mDB.query(DB_TABLE_APARTMENTS, null, null, null, null, null, null);
     }
 
-    public Cursor getBuildTypes() {
-        return mDB.query(DB_TABLE_BUILD_TYPES, null, null, null, null, null, null);
+    public List<String> getAllBuildTypes() {
+        List<String> types = new ArrayList<String>();
+        Cursor cursor = mDB.query(DB_TABLE_BUILD_TYPES, null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                types.add(cursor.getString(cursor.getColumnIndex(DB_FIELD_BUILD_TYPES_TYPE)));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return types;
+    }
+
+    public int getBuildTypeIdByName(String type) {
+        String[] args = new String[] {"" + type};
+        Cursor cursor = mDB.query(DB_TABLE_BUILD_TYPES, null, DB_FIELD_BUILD_TYPES_TYPE + " = ?", args, null, null, null);
+
+//        String query = "SELECT * FROM " + DB_TABLE_BUILD_TYPES +
+//                " WHERE " + DB_FIELD_BUILD_TYPES_TYPE + " = " + type + ";";
+//        Cursor cursor = mDB.rawQuery("", null);
+
+//        Log.d("log", "count cursor = " + cursor.getCount());
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+//            Log.d("log", "cursor id type = " + cursor.getInt(0));
+            return cursor.getInt(0);
+        } else
+            return -1;
+    }
+
+    public String getBuildTypeById(int id) {
+        if (id == -1)
+            return "";
+        String[] args = new String[] {"" + id};
+        Cursor cursor = mDB.query(DB_TABLE_BUILD_TYPES, null, DB_FIELD_BUILD_TYPES_ID + " = ?", args, null, null, null);
+//        Log.d("log", "count cursor = " + cursor.getCount());
+//        cursor.moveToFirst();
+//        Log.d("log", "type cursor = " + cursor.getString(1));
+        if (cursor.getCount() == 1) {
+            cursor.moveToFirst();
+//            Log.d("log", cursor.getString(cursor.getColumnIndex(DB_FIELD_BUILD_TYPES_TYPE)));
+            return cursor.getString(cursor.getColumnIndex(DB_FIELD_BUILD_TYPES_TYPE));
+        } else
+            return "";
     }
 
     private boolean hasBuildType(String type) {
@@ -188,17 +233,17 @@ public class DB {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(DB_CREATE_APARTMENTS_TABLE);
-//            db.execSQL(DB_CREATE_BUILD_TYPES_TABLE);
-//
-//            ContentValues cv = new ContentValues();
-//            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Хрущевка");
-//            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
-//            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Брежневка");
-//            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
-//            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "93 серия");
-//            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
-//            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Улучшенной планировки");
-//            db.insert(DB_CREATE_BUILD_TYPES_TABLE, null, cv);
+            db.execSQL(DB_CREATE_BUILD_TYPES_TABLE);
+
+            ContentValues cv = new ContentValues();
+            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Хрущевка");
+            db.insert(DB_TABLE_BUILD_TYPES, null, cv);
+            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Брежневка");
+            db.insert(DB_TABLE_BUILD_TYPES, null, cv);
+            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "93 серия");
+            db.insert(DB_TABLE_BUILD_TYPES, null, cv);
+            cv.put(DB_FIELD_BUILD_TYPES_TYPE, "Улучшенной планировки");
+            db.insert(DB_TABLE_BUILD_TYPES, null, cv);
         }
 
         @Override
