@@ -33,6 +33,7 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
     Apartment m_apartment;
 
     final String LOG_ADD_APART = "LOG_ADD_APART";
+    final String LOG_APART_EDIT_AP = "LOG_APART_EDIT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,8 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
         spBuildTypes.setOnItemSelectedListener(this);
 
         Intent intent = getIntent();
-        int apId = intent.getIntExtra("apartmentId", -1);
+        int apId = (int) intent.getLongExtra("apartmentId", -1);
+        Log.d(LOG_APART_EDIT_AP, "get id = " + apId);
 
         m_apartment = db.getApartmentById(apId);
 

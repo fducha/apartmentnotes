@@ -1,3 +1,6 @@
+// TODO will make method editApartment(Apartment ap)
+// TODO will make method removeApartment(int idApart)
+
 package ru.fducha.apartmentnotes;
 
 import android.content.ContentValues;

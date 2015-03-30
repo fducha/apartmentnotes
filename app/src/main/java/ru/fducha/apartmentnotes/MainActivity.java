@@ -1,4 +1,4 @@
-// TODO editing of Apartments
+// TODO editing of Apartments (use method editApartment instead of add method :-) )
 // TODO removing Apartments from list
 // TODO call to agent from Apartments List
 // TODO get agent's phone numbers from journal or contact list
@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
 
     final int CMENU_EDIT_APART = 1;
     final int CMENU_REMOVE_APART = 2;
+
+    final String LOG_APART_EDIT = "LOG_APART_EDIT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +106,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         if (item.getItemId() == CMENU_EDIT_APART) {
-            //
+            Intent intent = new Intent(this, ApartmentActivity.class);
+            long idApart = acmi.id;
+            Log.d(LOG_APART_EDIT, "id = " + idApart);
+            intent.putExtra("apartmentId", idApart);
+            startActivityForResult(intent, 0);
         }
 
         if (item.getItemId() == CMENU_REMOVE_APART) {
