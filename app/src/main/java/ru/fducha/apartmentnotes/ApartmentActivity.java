@@ -1,10 +1,9 @@
-// TODO fix bug on click Save button with empty fields apartments
-
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +31,8 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
     DB db;
 
     Apartment m_apartment;
+
+    final String LOG_ADD_APART = "LOG_ADD_APART";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +111,6 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
                 break;
             case R.id.btnSaveApartment:
                 addApartment();
-                Toast.makeText(this, "Apartment on " + m_apartment.getStreet() + " " +
-                                m_apartment.getBuildNo() + m_apartment.getHousing() + " was added.",
-                        Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case R.id.btnEditBuildTypes:
@@ -124,22 +122,79 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
 
     private void addApartment() {
         String street = etStreet.getText().toString();
-        int buildNo =  Integer.parseInt(etBuildNo.getText().toString());
+
+        int buildNo = 0;
+        try {
+            buildNo = Integer.parseInt(etBuildNo.getText().toString());
+        } catch (NumberFormatException e) {
+            Log.d(LOG_ADD_APART, "fail build No");
+        }
+
         String housing = etHousing.getText().toString();
-        int floor = Integer.parseInt(etFloor.getText().toString());
-        int totalFloors = Integer.parseInt(etTFloors.getText().toString());
-        int countRooms = Integer.parseInt(etCountRooms.getText().toString());
+        Log.d(LOG_ADD_APART, "" + housing);
+
+        int floor = 0;
+        try {
+            floor = Integer.parseInt(etFloor.getText().toString());
+        } catch (NumberFormatException e) {
+            Log.d(LOG_ADD_APART, "fail floor");
+        }
+        Log.d(LOG_ADD_APART, "" + floor);
+
+        int totalFloors = 0;
+        try {
+            totalFloors = Integer.parseInt(etTFloors.getText().toString());
+        } catch (NumberFormatException e) {
+            Log.d(LOG_ADD_APART, "fail total floors");
+        }
+        Log.d(LOG_ADD_APART, "" + totalFloors);
+
+        int countRooms = 0;
+        try {
+            countRooms = Integer.parseInt(etCountRooms.getText().toString());
+        } catch (NumberFormatException e) {
+            Log.d(LOG_ADD_APART, "fail count rooms");
+        }
+        Log.d(LOG_ADD_APART, "" + countRooms);
+
         boolean isBalcony = cbBalcony.isChecked();
+        Log.d(LOG_ADD_APART, "" + isBalcony);
+
         int type = m_apartment.getBuildTypeId();
-        int year = Integer.parseInt(etYearBuild.getText().toString());
-        int price = Integer.parseInt(etPrice.getText().toString());
+        Log.d(LOG_ADD_APART, "" + db.getBuildTypeById(type));
+
+        int year = 0;
+        try {
+            year = Integer.parseInt(etYearBuild.getText().toString());
+        } catch (NumberFormatException e) {
+            Log.d(LOG_ADD_APART, "fail years");
+        }
+        Log.d(LOG_ADD_APART, "" + year);
+
+        int price = 0;
+        try {
+            price = Integer.parseInt(etPrice.getText().toString());
+        } catch (NumberFormatException e) {
+            Log.d(LOG_ADD_APART, "fail price");
+        }
+        Log.d(LOG_ADD_APART, "" + price);
+
         String agency = etAgency.getText().toString();
         String agentName = etAgentName.getText().toString();
         String agentPhone = etAgentPhone.getText().toString();
+
         m_apartment = new Apartment(street, buildNo, housing, price, floor, totalFloors,
                 countRooms, isBalcony, type, year, agency, agentName, agentPhone);
-        if (!m_apartment.isEmpty())
+
+        if (!m_apartment.isEmpty()) {
             db.addApartment(m_apartment);
+            Toast.makeText(this, "Apartment on " + m_apartment.getStreet() + " " +
+                            m_apartment.getBuildNo() + m_apartment.getHousing() + " was added.",
+                    Toast.LENGTH_SHORT).show();
+            Log.d(LOG_ADD_APART, "Apartment's fields are NOT empty.");
+        } else {
+            Log.d(LOG_ADD_APART, "Apartment's fields are empty.");
+        }
     }
 
     private void loadSpinnerData() {

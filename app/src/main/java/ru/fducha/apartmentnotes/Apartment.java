@@ -58,7 +58,7 @@ public class Apartment {
     }
 
     public boolean isEmpty() {
-        return getStreet().isEmpty();
+        return getStreet().equals("");
     }
 
     public void setId(int _id) {
