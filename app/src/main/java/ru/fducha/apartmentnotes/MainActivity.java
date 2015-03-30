@@ -1,3 +1,8 @@
+// TODO update Apartments List when returning to it after Save button click
+// TODO editing of Apartments
+// TODO call to agent from Apartments List
+// TODO get agent's phone numbers from journal or contact list
+
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;

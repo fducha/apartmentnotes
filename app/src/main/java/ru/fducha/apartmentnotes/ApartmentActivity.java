@@ -1,3 +1,5 @@
+// TODO fix bug on click Save button with empty fields apartments
+
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;
