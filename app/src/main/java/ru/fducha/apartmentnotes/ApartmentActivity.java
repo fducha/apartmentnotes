@@ -70,7 +70,6 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
         int apId = intent.getIntExtra("apartmentId", -1);
 
         m_apartment = db.getApartmentById(apId);
-//        Log.d("log", "create build = " + m_apartment.getBuildTypeId());
 
         setApartmentDataToWidgets();
     }
@@ -107,10 +106,12 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnCancelApartment:
+                setResult(RESULT_CANCELED);
                 finish();
                 break;
             case R.id.btnSaveApartment:
                 addApartment();
+                setResult(RESULT_OK);
                 finish();
                 break;
             case R.id.btnEditBuildTypes:

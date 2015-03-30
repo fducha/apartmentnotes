@@ -1,5 +1,6 @@
 // TODO update Apartments List when returning to it after Save button click
 // TODO editing of Apartments
+// TODO removing Apartments from list
 // TODO call to agent from Apartments List
 // TODO get agent's phone numbers from journal or contact list
 
@@ -115,7 +116,15 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
         if (v.getId() == R.id.btnAddApartment) {
             Intent intent = new Intent(this, ApartmentActivity.class);
             intent.putExtra("apartmentId", -1);
-            startActivity(intent);
+            startActivityForResult(intent, 0);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            getLoaderManager().getLoader(0).forceLoad();
         }
     }
 
