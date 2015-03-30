@@ -1,4 +1,3 @@
-// TODO update Apartments List when returning to it after Save button click
 // TODO editing of Apartments
 // TODO removing Apartments from list
 // TODO call to agent from Apartments List
@@ -14,9 +13,10 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Menu;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -24,13 +24,15 @@ import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
-
 public class MainActivity extends Activity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     Button btnAddApartment;
     ListView lvApartments;
     DB db;
     MySimpleCursorAdapter scAdapter;
+
+    final int CMENU_EDIT_APART = 1;
+    final int CMENU_REMOVE_APART = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,19 +77,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
         scAdapter = new MySimpleCursorAdapter(this, R.layout.aprtment_item, null, from, to, 0);
         lvApartments = (ListView) findViewById(R.id.lvApartments);
         lvApartments.setAdapter(scAdapter);
+        registerForContextMenu(lvApartments);
 
         btnAddApartment = (Button) findViewById(R.id.btnAddApartment);
         btnAddApartment.setOnClickListener(this);
 
         getLoaderManager().initLoader(0, null, this);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     @Override
@@ -97,18 +92,25 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, CMENU_EDIT_APART, 0, R.string.cm_lvApartments_edit);
+        menu.add(0, CMENU_REMOVE_APART, 1, R.string.cm_lvApartment_remove);
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        if (item.getItemId() == CMENU_EDIT_APART) {
+            //
         }
 
-        return super.onOptionsItemSelected(item);
+        if (item.getItemId() == CMENU_REMOVE_APART) {
+            //
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -154,7 +156,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
         public Cursor loadInBackground() {
             Cursor c = db.getAllApartments();
             try {
-                TimeUnit.MILLISECONDS.sleep(500);
+                TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

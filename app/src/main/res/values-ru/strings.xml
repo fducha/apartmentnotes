@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Квартира на заметку</string>
+    <string name="action_settings">Настройки</string>
+    <string name="hello_world">Привет мир!!</string>
+    <string name="title_activity_apartment">Квартира</string>
+    <string name="cm_lvApartments_edit">Редактировать данные</string>
+    <string name="cm_lvApartment_remove">Удалить квартиру</string>
+</resources>

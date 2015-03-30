@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">ApartmentNotes</string>
+    <string name="app_name">Apartment Notes</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_apartment">ApartmentActivity</string>
-    <string name="prompt">Выберите тип дома</string>
+    <string name="title_activity_apartment">Apartment</string>
+    <string name="cm_lvApartments_edit">Edit data</string>
+    <string name="cm_lvApartment_remove">Remove apartment</string>
 </resources>
