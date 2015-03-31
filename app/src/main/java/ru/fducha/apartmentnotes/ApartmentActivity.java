@@ -1,12 +1,14 @@
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -74,6 +76,10 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
         m_apartment = db.getApartmentById(apId);
 
         setApartmentDataToWidgets();
+
+        // hide soft keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etStreet.getWindowToken(), 0);
     }
 
     @Override
@@ -112,7 +118,20 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
                 finish();
                 break;
             case R.id.btnSaveApartment:
-                addApartment();
+
+                Log.d(LOG_APART_EDIT_AP, "apartment id = " + m_apartment.getId());
+
+                // save new Apartment
+                if (m_apartment.getId() == -1) {
+                    addApartment();
+                    Log.d(LOG_APART_EDIT_AP, "I'm here add");
+                } else {
+                    // update exists Apartment
+                    Log.d(LOG_APART_EDIT_AP, "I'm here edit");
+                    getApartmentDataFromWidgets();
+                    db.editApartment(m_apartment);
+                }
+
                 setResult(RESULT_OK);
                 finish();
                 break;
@@ -124,6 +143,20 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
     }
 
     private void addApartment() {
+        getApartmentDataFromWidgets();
+
+        if (!m_apartment.isEmpty()) {
+            db.addApartment(m_apartment);
+            Toast.makeText(this, "Apartment on " + m_apartment.getStreet() + " " +
+                            m_apartment.getBuildNo() + m_apartment.getHousing() + " was added.",
+                    Toast.LENGTH_SHORT).show();
+            Log.d(LOG_ADD_APART, "Apartment's fields are NOT empty.");
+        } else {
+            Log.d(LOG_ADD_APART, "Apartment's fields are empty.");
+        }
+    }
+
+    private void getApartmentDataFromWidgets() {
         String street = etStreet.getText().toString();
 
         int buildNo = 0;
@@ -186,18 +219,24 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
         String agentName = etAgentName.getText().toString();
         String agentPhone = etAgentPhone.getText().toString();
 
-        m_apartment = new Apartment(street, buildNo, housing, price, floor, totalFloors,
-                countRooms, isBalcony, type, year, agency, agentName, agentPhone);
-
-        if (!m_apartment.isEmpty()) {
-            db.addApartment(m_apartment);
-            Toast.makeText(this, "Apartment on " + m_apartment.getStreet() + " " +
-                            m_apartment.getBuildNo() + m_apartment.getHousing() + " was added.",
-                    Toast.LENGTH_SHORT).show();
-            Log.d(LOG_ADD_APART, "Apartment's fields are NOT empty.");
+        if (m_apartment.getId() == -1) {
+            m_apartment = new Apartment(street, buildNo, housing, price, floor, totalFloors,
+                    countRooms, isBalcony, type, year, agency, agentName, agentPhone);
         } else {
-            Log.d(LOG_ADD_APART, "Apartment's fields are empty.");
+            m_apartment.setStreet(street);
+            m_apartment.setBuildNo(buildNo);
+            m_apartment.setHousing(housing);
+            m_apartment.setPrice(price);
+            m_apartment.setFloor(floor);
+            m_apartment.setTotalFloors(totalFloors);
+            m_apartment.setCountRooms(countRooms);
+            m_apartment.setBalcony(isBalcony);
+            m_apartment.setBuildTypeId(type);
+            m_apartment.setAgencyName(agency);
+            m_apartment.setAgentName(agentName);
+            m_apartment.setAgentPhone(agentPhone);
         }
+
     }
 
     private void loadSpinnerData() {

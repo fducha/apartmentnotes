@@ -104,10 +104,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        long idApart = acmi.id;
 
         if (item.getItemId() == CMENU_EDIT_APART) {
             Intent intent = new Intent(this, ApartmentActivity.class);
-            long idApart = acmi.id;
             Log.d(LOG_APART_EDIT, "id = " + idApart);
             intent.putExtra("apartmentId", idApart);
             startActivityForResult(intent, 0);

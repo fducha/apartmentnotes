@@ -1,4 +1,3 @@
-// TODO will make method editApartment(Apartment ap)
 // TODO will make method removeApartment(int idApart)
 
 package ru.fducha.apartmentnotes;
@@ -8,6 +7,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +94,8 @@ public class DB {
                     DB_FIELD_APARTMENT_NOTES_NOTE + " text" +
             ");";
 
+    final String LOG_DB = "LOG_APART_EDIT";
+
     private final Context mCtx;
 
     private DBHelper mDBHelper;
@@ -114,6 +116,19 @@ public class DB {
     }
 
     public void addApartment(Apartment apartment) {
+        ContentValues cv = getContentValuesFromApartment(apartment);
+        mDB.insert(DB_TABLE_APARTMENTS, null, cv);
+    }
+
+    public void editApartment(Apartment apartment) {
+        int apId = apartment.getId();
+        Log.d(LOG_DB, "edit id = " + apId);
+        ContentValues cv = getContentValuesFromApartment(apartment);
+        int countRecs = mDB.update(DB_TABLE_APARTMENTS, cv, DB_FIELD_APARTMENTS_ID + " = ?", new String[] { "" + apId});
+        Log.d(LOG_DB, "count update recs = " + countRecs);
+    }
+
+    private ContentValues getContentValuesFromApartment(Apartment apartment) {
         ContentValues cv = new ContentValues();
         cv.put(DB_FIELD_APARTMENTS_STREET, apartment.getStreet());
         cv.put(DB_FIELD_APARTMENTS_BUILD_NO, apartment.getBuildNo());
@@ -128,7 +143,7 @@ public class DB {
         cv.put(DB_FIELD_APARTMENTS_AGENCY_NAME, apartment.getAgencyName());
         cv.put(DB_FIELD_APARTMENTS_AGENT_NAME, apartment.getAgentName());
         cv.put(DB_FIELD_APARTMENTS_AGENT_PHONE, apartment.getAgentPhone());
-        mDB.insert(DB_TABLE_APARTMENTS, null, cv);
+        return cv;
     }
 
     public Apartment getApartmentById(int _id) {
