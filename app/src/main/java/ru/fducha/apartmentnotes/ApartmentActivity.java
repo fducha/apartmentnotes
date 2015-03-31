@@ -5,10 +5,11 @@ package ru.fducha.apartmentnotes;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -27,7 +28,7 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
 
     Spinner spBuildTypes;
     Button btnCancelApartment, btnSaveApartment;
-    ImageButton btnEditBuildTypes;
+    ImageButton btnEditBuildTypes, btnOpenCalls;
     EditText etStreet, etBuildNo, etHousing, etFloor, etTFloors,
              etCountRooms, etYearBuild, etPrice, etAgency,
              etAgentName, etAgentPhone;
@@ -39,6 +40,9 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
     final String LOG_ADD_APART = "LOG_ADD_APART";
     final String LOG_APART_EDIT_AP = "LOG_APART_EDIT";
 
+    final int PICK_CONTACT = 100;
+    private static final String[] phoneProtection = new String[] {ContactsContract.CommonDataKinds.Phone.DATA};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,7 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
         btnCancelApartment = (Button) findViewById(R.id.btnCancelApartment);
         btnSaveApartment = (Button) findViewById(R.id.btnSaveApartment);
         btnEditBuildTypes = (ImageButton) findViewById(R.id.btnEditBuildTypes);
+        btnOpenCalls = (ImageButton) findViewById(R.id.btnOpenCalls);
 
         etStreet = (EditText) findViewById(R.id.etStreet);
         etBuildNo = (EditText) findViewById(R.id.etBuildNo);
@@ -64,6 +69,7 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
         btnSaveApartment.setOnClickListener(this);
         btnCancelApartment.setOnClickListener(this);
         btnEditBuildTypes.setOnClickListener(this);
+        btnOpenCalls.setOnClickListener(this);
 
         db = new DB(this);
         db.open();
@@ -88,28 +94,6 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
     protected void onDestroy() {
         super.onDestroy();
         db.close();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_apartment, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -141,6 +125,34 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
                 //Toast.makeText(this, "add type build", Toast.LENGTH_SHORT).show();
                 //showDialogAddingBuildType();
                 break;
+            case R.id.btnOpenCalls:
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                startActivityForResult(intent, PICK_CONTACT);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_CONTACT){
+            if (resultCode == RESULT_OK) {
+                Uri contactData = data.getData();
+                Log.d(LOG_APART_EDIT_AP, contactData.toString());
+                if (contactData == null) return;
+                Cursor c = getContentResolver().query(contactData, phoneProtection, null, null, null);
+                if (c == null) return;
+                try {
+                    while (c.moveToNext()) {
+                        String phone = c.getString(0);
+                        etAgentPhone.setText(phone);
+                    }
+                } finally {
+                    c.close();
+                }
+            }
         }
     }
 

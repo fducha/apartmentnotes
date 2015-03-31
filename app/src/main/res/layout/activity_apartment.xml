@@ -189,7 +189,8 @@
                     android:layout_height="40dp"
                     android:id="@+id/btnEditBuildTypes"
                     android:src="@android:drawable/ic_menu_edit"
-                    android:scaleType="center" />
+                    android:scaleType="center"
+                    android:layout_gravity="center_vertical" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -201,7 +202,8 @@
                 <Spinner
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/spBuildTypes" />
+                    android:id="@+id/spBuildTypes"
+                    android:layout_gravity="center_vertical" />
 
             </LinearLayout>
 
@@ -283,14 +285,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Телефон: "
-                    android:id="@+id/textView12" />
+                    android:id="@+id/textView12"
+                    android:layout_gravity="center_vertical" />
 
                 <EditText
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/etAgentPhone"
                     android:layout_marginLeft="5dp"
-                    android:inputType="phone|number" />
+                    android:inputType="phone|number"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+
+                <ImageButton
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/btnOpenCalls"
+                    android:layout_gravity="center_vertical"
+                    android:src="@android:drawable/ic_menu_search" />
             </LinearLayout>
 
             <LinearLayout

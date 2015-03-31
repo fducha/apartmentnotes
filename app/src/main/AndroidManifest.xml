@@ -18,7 +18,8 @@
         </activity>
         <activity
             android:name=".ApartmentActivity"
-            android:label="@string/title_activity_apartment" >
+            android:label="@string/title_activity_apartment"
+            android:permission="android.permission.READ_CONTACTS">
         </activity>
     </application>
 
