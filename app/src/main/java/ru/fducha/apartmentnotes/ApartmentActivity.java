@@ -1,3 +1,5 @@
+// TODO will make input masks for input fields
+
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;
@@ -252,30 +254,6 @@ public class ApartmentActivity extends Activity implements View.OnClickListener,
             spBuildTypes.setSelection(bTypes.indexOf(currentType));
         }
     }
-
-//    private void showDialogAddingBuildType() {
-//        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//        alert.setTitle("Тип дома");
-//        alert.setMessage("Введите новый тип дома");
-//        final EditText input = new EditText(this);
-//        input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-//        alert.setView(input);
-//        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                String value = input.getText().toString();
-//                //Toast.makeText(this, "new type " + value, Toast.LENGTH_SHORT).show();
-//                Log.d("log", value);
-//            }
-//        });
-//        alert.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                //
-//            }
-//        });
-//        alert.show();
-//    }
 
     private void setApartmentDataToWidgets() {
         etStreet.setText(m_apartment.getStreet());

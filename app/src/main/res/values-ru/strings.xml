@@ -10,4 +10,5 @@
     <string name="ad_message">Вы действительно хотите удалить эту квартиру?</string>
     <string name="ad_ok_button">Удалить</string>
     <string name="ad_cancel_button">Отмена</string>
+    <string name="cm_lvApartments_call_agent">Позвонить агенту</string>
 </resources>

@@ -1,5 +1,5 @@
-// TODO call to agent from Apartments List
 // TODO get agent's phone numbers from journal or contact list
+// TODO translate app
 
 package ru.fducha.apartmentnotes;
 
@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
 
     final int CMENU_EDIT_APART = 1;
     final int CMENU_REMOVE_APART = 2;
+    final int CMENU_CALL_AGENT = 3;
 
     final String LOG_APART_EDIT = "LOG_APART_EDIT";
 
@@ -97,14 +99,22 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, CMENU_EDIT_APART, 0, R.string.cm_lvApartments_edit);
-        menu.add(0, CMENU_REMOVE_APART, 1, R.string.cm_lvApartment_remove);
+        menu.add(0, CMENU_CALL_AGENT, 0, R.string.cm_lvApartments_call_agent);
+        menu.add(1, CMENU_EDIT_APART, 1, R.string.cm_lvApartments_edit);
+        menu.add(1, CMENU_REMOVE_APART, 2, R.string.cm_lvApartment_remove);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final long idApart = acmi.id;
+
+        if (item.getItemId() == CMENU_CALL_AGENT) {
+            Apartment ap = db.getApartmentById((int) idApart);
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + ap.getAgentPhone()));
+            startActivity(intent);
+        }
 
         if (item.getItemId() == CMENU_EDIT_APART) {
             Intent intent = new Intent(this, ApartmentActivity.class);
