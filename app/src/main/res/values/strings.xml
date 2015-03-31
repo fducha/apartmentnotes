@@ -6,4 +6,8 @@
     <string name="title_activity_apartment">Apartment</string>
     <string name="cm_lvApartments_edit">Edit data</string>
     <string name="cm_lvApartment_remove">Remove apartment</string>
+    <string name="ad_title">Removing Apartment</string>
+    <string name="ad_message">Do you really want to delete the apartment?</string>
+    <string name="ad_ok_button">Remove</string>
+    <string name="ad_cancel_button">Cancel</string>
 </resources>

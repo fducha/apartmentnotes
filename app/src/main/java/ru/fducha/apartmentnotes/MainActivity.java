@@ -1,14 +1,14 @@
-// TODO editing of Apartments (use method editApartment instead of add method :-) )
-// TODO removing Apartments from list
 // TODO call to agent from Apartments List
 // TODO get agent's phone numbers from journal or contact list
 
 package ru.fducha.apartmentnotes;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -104,7 +104,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        long idApart = acmi.id;
+        final long idApart = acmi.id;
 
         if (item.getItemId() == CMENU_EDIT_APART) {
             Intent intent = new Intent(this, ApartmentActivity.class);
@@ -114,7 +114,27 @@ public class MainActivity extends Activity implements View.OnClickListener, Load
         }
 
         if (item.getItemId() == CMENU_REMOVE_APART) {
-            //
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle(R.string.ad_title);
+            alert.setMessage(R.string.ad_message);
+
+            alert.setPositiveButton(R.string.ad_ok_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    db.removeApartment((int) idApart);
+                    getLoaderManager().getLoader(0).forceLoad();
+                }
+            });
+            alert.setNegativeButton(R.string.ad_cancel_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //
+                }
+            });
+            alert.show();
+
+
         }
 
         return super.onContextItemSelected(item);

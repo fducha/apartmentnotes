@@ -1,4 +1,3 @@
-// TODO will make method removeApartment(int idApart)
 
 package ru.fducha.apartmentnotes;
 
@@ -126,6 +125,10 @@ public class DB {
         ContentValues cv = getContentValuesFromApartment(apartment);
         int countRecs = mDB.update(DB_TABLE_APARTMENTS, cv, DB_FIELD_APARTMENTS_ID + " = ?", new String[] { "" + apId});
         Log.d(LOG_DB, "count update recs = " + countRecs);
+    }
+
+    public void removeApartment(int id) {
+        mDB.delete(DB_TABLE_APARTMENTS, DB_FIELD_APARTMENTS_ID + " = " + id, null);
     }
 
     private ContentValues getContentValuesFromApartment(Apartment apartment) {

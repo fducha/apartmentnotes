@@ -6,4 +6,8 @@
     <string name="title_activity_apartment">Квартира</string>
     <string name="cm_lvApartments_edit">Редактировать данные</string>
     <string name="cm_lvApartment_remove">Удалить квартиру</string>
+    <string name="ad_title">Удаление квартиры</string>
+    <string name="ad_message">Вы действительно хотите удалить эту квартиру?</string>
+    <string name="ad_ok_button">Удалить</string>
+    <string name="ad_cancel_button">Отмена</string>
 </resources>
